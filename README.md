@@ -7,6 +7,8 @@
 
   <h3>🏋️‍♂️ Comprehensive Fitness Exercise Database API</h3>
   
+  <!-- Modified by descanpo team -->
+  
   <p>
     <strong>5,000+ structured exercises</strong> • <strong>Fast & Modern</strong> • <strong>Developer-Friendly</strong>
   </p>
