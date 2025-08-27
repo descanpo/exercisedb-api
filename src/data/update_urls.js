@@ -27,10 +27,44 @@ const updatedData = originalData.map(exercise => {
 
 console.log('URLs updated successfully');
 
-// Yeni dosyayı oluştur (orijinal formatı koruyarak - 2 space indentation)
+// Özel JSON formatı (orijinal formatı koruyarak)
+function formatExerciseJson(data) {
+  const items = data.map(exercise => {
+    // Her bir exercise objesini özel formatlama
+    const lines = [];
+    lines.push('  {');
+    lines.push(`    "exerciseId": "${exercise.exerciseId}",`);
+    lines.push(`    "name": "${exercise.name}",`);
+    lines.push(`    "gifUrl": "${exercise.gifUrl}",`);
+    lines.push(`    "targetMuscles": ${JSON.stringify(exercise.targetMuscles)},`);
+    lines.push(`    "bodyParts": ${JSON.stringify(exercise.bodyParts)},`);
+    lines.push(`    "equipments": ${JSON.stringify(exercise.equipments)},`);
+    lines.push(`    "secondaryMuscles": ${JSON.stringify(exercise.secondaryMuscles)},`);
+    
+    // Instructions array'i özel formatlama
+    if (exercise.instructions && exercise.instructions.length > 0) {
+      lines.push('    "instructions": [');
+      exercise.instructions.forEach((instruction, index) => {
+        const comma = index < exercise.instructions.length - 1 ? ',' : '';
+        lines.push(`      "${instruction}"${comma}`);
+      });
+      lines.push('    ]');
+    } else {
+      lines.push('    "instructions": [');
+      lines.push('    ]');
+    }
+    
+    lines.push('  }');
+    return lines.join('\n');
+  });
+  
+  return '[\n' + items.join(',\n') + '\n]';
+}
+
+// Yeni dosyayı oluştur (orijinal formatı koruyarak)
 const newFilePath = path.join(__dirname, 'exercises_updated.json');
 console.log('Writing updated file:', newFilePath);
-fs.writeFileSync(newFilePath, JSON.stringify(updatedData, null, 2), 'utf8');
+fs.writeFileSync(newFilePath, formatExerciseJson(updatedData), 'utf8');
 
 console.log(`✅ Updated ${updatedData.length} exercises`);
 console.log(`✅ Created new file: exercises_updated.json`);
